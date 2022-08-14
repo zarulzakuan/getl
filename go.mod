@@ -1,4 +1,4 @@
-module getl
+module gtihub.com/zarulzakuan/getl
 
 go 1.18
 
