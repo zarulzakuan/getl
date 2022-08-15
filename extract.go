@@ -8,14 +8,12 @@ import (
 // SourceNode is the wrapper for the user defined node definition to be run on the pipeline
 // Name - Name of node
 // Runner - pointer to the user defined function to extract the data
-
 type SourceNode struct {
 	Name   string
 	Runner func(*io.PipeWriter, *io.PipeReader)
 }
 
 // Source receives the user defined node definition
-
 func (c *Scheduler) Source(s *SourceNode) *NodeWrapper {
 
 	nw := new(NodeWrapper)
@@ -39,7 +37,6 @@ func (c *Scheduler) Source(s *SourceNode) *NodeWrapper {
 }
 
 // Execute runs the user defined function
-
 func (n *SourceNode) Execute(f func(*io.PipeWriter, *io.PipeReader), pipeWriter *io.PipeWriter, input *io.PipeReader, closeWhenDone bool) {
 	fmt.Println("Get source: " + n.Name)
 	go func() {

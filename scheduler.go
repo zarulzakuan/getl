@@ -8,7 +8,6 @@ import (
 )
 
 // Scheduler is a timer wrapper so we can pass it to the Source node
-
 type Scheduler struct {
 	SchedAt *gocron.Scheduler
 }
@@ -16,7 +15,6 @@ type Scheduler struct {
 // RunAt - creates a scheduler. Requires the timer in either cron expression in string
 // or seconds in integer, timezone, and boolean; if true, set the job to not start immediately
 // but rather wait until the first scheduled interval
-
 func RunAt(timer any, tz *time.Location, wait bool) *Scheduler {
 
 	s := new(Scheduler)
@@ -39,7 +37,6 @@ func RunAt(timer any, tz *time.Location, wait bool) *Scheduler {
 }
 
 // RunNow - Run the pipeline immediately with no scheduling
-
 func RunNow() *Scheduler {
 	return nil
 }
