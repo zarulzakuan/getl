@@ -5,10 +5,16 @@ import (
 	"io"
 )
 
+// SinkNode is the wrapper for the user defined node definition to be run on the pipeline
+// Name - Name of node
+// Runner - pointer to the user defined function to dump the processed data
+
 type SinkNode struct {
 	Name   string
 	Runner func(*io.PipeWriter, *io.PipeReader)
 }
+
+// Sink receives the user defined node definition
 
 func (p *NodeWrapper) Sink(s *SinkNode) *NodeWrapper {
 
@@ -20,11 +26,18 @@ func (p *NodeWrapper) Sink(s *SinkNode) *NodeWrapper {
 	r, w := io.Pipe()
 	nw.Output = r
 
-	s.Execute(s.Runner, w, p.Output)
+	s.Execute(s.Runner, w, p.Output, true)
 	return nw
 }
 
-func (n *SinkNode) Execute(f func(*io.PipeWriter, *io.PipeReader), pipeWriter *io.PipeWriter, input *io.PipeReader) {
+// Execute runs the user defined function
+
+func (n *SinkNode) Execute(f func(*io.PipeWriter, *io.PipeReader), pipeWriter *io.PipeWriter, input *io.PipeReader, closeWhenDone bool) {
 	fmt.Println("Dump sink: " + n.Name)
-	go f(pipeWriter, input)
+	go func() {
+		if closeWhenDone {
+			defer pipeWriter.Close()
+		}
+		f(pipeWriter, input)
+	}()
 }

@@ -5,12 +5,18 @@ import (
 	"io"
 )
 
+// SourceNode is the wrapper for the user defined node definition to be run on the pipeline
+// Name - Name of node
+// Runner - pointer to the user defined function to extract the data
+
 type SourceNode struct {
 	Name   string
 	Runner func(*io.PipeWriter, *io.PipeReader)
 }
 
-func (schedule *Scheduler) Source(s *SourceNode) *NodeWrapper {
+// Source receives the user defined node definition
+
+func (c *Scheduler) Source(s *SourceNode) *NodeWrapper {
 
 	nw := new(NodeWrapper)
 
@@ -21,13 +27,26 @@ func (schedule *Scheduler) Source(s *SourceNode) *NodeWrapper {
 
 	nw.Output = r
 
-	schedule.SchedAt.Do(func() { s.Execute(s.Runner, w, nil) })
-	schedule.SchedAt.StartAsync()
+	if c != nil {
+		c.SchedAt.Do(func() { s.Execute(s.Runner, w, nil, false) })
+		c.SchedAt.SingletonMode()
+		c.SchedAt.StartAsync()
+	} else {
+		s.Execute(s.Runner, w, nil, true)
+	}
 
 	return nw
 }
 
-func (n *SourceNode) Execute(f func(*io.PipeWriter, *io.PipeReader), pipeWriter *io.PipeWriter, input *io.PipeReader) {
+// Execute runs the user defined function
+
+func (n *SourceNode) Execute(f func(*io.PipeWriter, *io.PipeReader), pipeWriter *io.PipeWriter, input *io.PipeReader, closeWhenDone bool) {
 	fmt.Println("Get source: " + n.Name)
-	go f(pipeWriter, input)
+	go func() {
+		if closeWhenDone {
+			defer pipeWriter.Close()
+		}
+		f(pipeWriter, input)
+
+	}()
 }
