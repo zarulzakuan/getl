@@ -1,8 +1,25 @@
 # getl
 
-getl, pronounce "getle" as in Go ETL is a framework for building pipeline for data integration
+getl, pronounced "getle" as in Go ETL is a framework for building pipeline for data integration
 and data transformation. Similar to water pipeline, data is streamed from source to sink, and
 transformed in between.
+
+## Installation
+
+```bash
+go get github.com/zarulzakuan/getl
+```
+
+```go
+package main
+
+import (
+	"github.com/zarulzakuan/getl"
+)
+...
+```
+
+## How it works?
 
 Nodes are the data processors. They are responsible for data extracting; Source, data dumping; Sink
 or data transformation; Transform. And 2 auxiliary nodes, Tee and Union for splitting data flow
