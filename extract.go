@@ -22,6 +22,7 @@ func (schedule *Scheduler) Source(s *SourceNode) *NodeWrapper {
 	nw.Output = r
 
 	schedule.SchedAt.Do(func() { s.Execute(s.Runner, w, nil) })
+	schedule.SchedAt.StartBlocking()
 
 	return nw
 }
