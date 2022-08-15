@@ -2,9 +2,11 @@
 
 getl, pronounce "getle" as in Go ETL is a framework for building pipeline for data integration
 and data transformation. Similar to water pipeline, data is streamed from source to sink, and
-transformed in between can be split into multiple flows and merged from multiple flows.
-Nodes are the data processors. They can be responsible for data extracting; Source, data dumping; Sink
-or data transformation; Transform. And 2 auxiliary nodes, Tee and Union
+transformed in between.
+
+Nodes are the data processors. They are responsible for data extracting; Source, data dumping; Sink
+or data transformation; Transform. And 2 auxiliary nodes, Tee and Union for splitting data flow
+into multiple flows and merging multiple flows into a single flow.
 
 ```go
  ___________                 _____________                 __________
@@ -63,4 +65,4 @@ getl.RunNow().Source(source2).Union(dataflow1).Sink(sink)
 ```
 
 ---
-
+Readme created from Go doc with [goreadme](https://github.com/posener/goreadme)
